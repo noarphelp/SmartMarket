@@ -1,7 +1,12 @@
 package com.example.demo.repositories;
 
 
-public interface DetalleVentaRepository {
+import com.example.demo.entities.DetalleVenta;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-
+public interface DetalleVentaRepository extends JpaRepository<DetalleVenta, Long> {
 }
+
+
+
+
