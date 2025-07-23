@@ -1,6 +1,7 @@
 package com.example.demo.services.implementations;
 
 import com.example.demo.dtos.DetalleVentaDTO;
+
 import com.example.demo.dtos.DetalleVentaInputDTO;
 import com.example.demo.entities.DetalleVenta;
 import com.example.demo.entities.Producto;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DetalleVentaService implements IDetalleVentaService {
@@ -22,13 +25,37 @@ public class DetalleVentaService implements IDetalleVentaService {
     private ProductoRepository productoRepository;
 
     @Override
-    public DetalleVentaDTO crearDetalleVenta(DetalleVentaInputDTO inputDTO) {
-        Producto producto = productoRepository.findById(inputDTO.getProductoId()).orElseThrow();
+    public List<DetalleVentaDTO> findAllDetallesVenta() {
+        List<DetalleVenta> detalles = detalleVentaRepository.findAll();
+        return detalles.stream()
+                .map(detalle -> {
+                    Producto producto = detalle.getProducto();
+                    return new DetalleVentaDTO(
+                            detalle.getId(),
+                            LocalDate.now(),
+                            detalle.getCantidad(),
+                            producto.getNombre(),
+                            "Sucursal ejemplo");
+                })
+                            .collect(Collectors.toList());
+
+    }
+    public static DetalleVenta toEntity(DetalleVentaInputDTO dto, Producto producto) {
         DetalleVenta detalle = new DetalleVenta();
         detalle.setProducto(producto);
-        detalle.setCantidad(inputDTO.getCantidad());
-        detalle = detalleVentaRepository.save(detalle);
-        return new DetalleVentaDTO(detalle.getId(), LocalDate.now(), detalle.getCantidad(), producto.getNombre(), "Sucursal ejemplo");
+        detalle.setCantidad(dto.getCantidad());
+        return detalle;
     }
+
+    public static DetalleVentaDTO toDTO(DetalleVenta detalle) {
+        return new DetalleVentaDTO(
+                detalle.getId(),
+                LocalDate.now(),
+                detalle.getCantidad(),
+                detalle.getProducto().getNombre(),
+                "Sucursal ejemplo"
+        );
+    }
+
 }
 

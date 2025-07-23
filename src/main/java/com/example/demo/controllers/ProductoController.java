@@ -9,40 +9,65 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/api/productos")
+@RequestMapping("/productos")
 public class ProductoController {
 
     @Autowired
     private IProductoService productoService;
 
-    //  Listar productos
+    // Listar productos
     @GetMapping
     public ResponseEntity<List<ProductoDTO>> listarProductos() {
-        return ResponseEntity.ok(productoService.obtenerTodosLosProductos());
+        List<ProductoDTO> productos = productoService.obtenerTodosLosProductos();
+        if (productos.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(productos);
+        }
+        return ResponseEntity.ok(productos);
     }
 
     // Crear producto
     @PostMapping
     public ResponseEntity<ProductoDTO> crearProducto(@RequestBody ProductoDTO productoDTO) {
         ProductoDTO nuevoProducto = productoService.crearProducto(productoDTO);
+        if (nuevoProducto == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoProducto);
     }
 
-    //  Actualizar producto
+    // Actualizar producto
     @PutMapping("/{id}")
     public ResponseEntity<ProductoDTO> actualizarProducto(@PathVariable Long id, @RequestBody ProductoDTO productoDTO) {
-        ProductoDTO actualizado = productoService.actualizarProducto(id, productoDTO);
-        return ResponseEntity.ok(actualizado);
+        try {
+            ProductoDTO actualizado = productoService.actualizarProducto(id, productoDTO);
+            return ResponseEntity.ok(actualizado);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     // Eliminar producto
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
-        productoService.eliminarProducto(id);
-        return ResponseEntity.noContent().build();
+        try {
+            productoService.eliminarProducto(id);
+            return ResponseEntity.noContent().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    // Obtener producto por ID (opcional extra)
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductoDTO> obtenerProductoPorId(@PathVariable Long id) {
+        try {
+            ProductoDTO producto = productoService.obtenerProductoPorId(id);
+            return ResponseEntity.ok(producto);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }
-
-

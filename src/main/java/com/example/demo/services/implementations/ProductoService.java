@@ -53,5 +53,23 @@ public class ProductoService implements IProductoService {
                 .map(p -> new ProductoDTO(p.getId(), p.getNombre(), p.getCategoria(), p.getPrecio()))
                 .collect(Collectors.toList());
     }
+
+    public static ProductoDTO toDTO(Producto producto) {
+        return new ProductoDTO(
+                producto.getId(),
+                producto.getNombre(),
+                producto.getCategoria(),
+                producto.getPrecio()
+        );
+    }
+
+    public static Producto toEntity(ProductoDTO dto) {
+        Producto producto = new Producto();
+        producto.setId(dto.getId());
+        producto.setNombre(dto.getNombre());
+        producto.setCategoria(dto.getCategoria());
+        producto.setPrecio(dto.getPrecio());
+        return producto;
+    }
 }
 
