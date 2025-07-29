@@ -9,10 +9,7 @@ import java.util.List;
 public interface IDetalleVentaService {
     List<DetalleVentaDTO> findAllDetallesVenta();
 
-
-
-    List<DetalleVentaDTO> buscarPorParametros (String nombreProducto, String categoria,
-                                               Integer cantidadMinima, List<String> sucursales, LocalDate fecha);
+    List<DetalleVentaDTO> buscarPorParametros(LocalDate fecha, List<String> sucursales);
 
     void eliminarDetalleVenta(Long id);
 }

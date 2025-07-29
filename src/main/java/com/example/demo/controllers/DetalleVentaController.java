@@ -2,7 +2,9 @@ package com.example.demo.controllers;
 
 import com.example.demo.dtos.DetalleVentaDTO;
 
+import com.example.demo.entities.DetalleVenta;
 import com.example.demo.exceptions.DatosInvalidos;
+import com.example.demo.exceptions.RecursoNoEncontrado;
 import com.example.demo.services.interfaces.IDetalleVentaService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,46 +24,32 @@ public class DetalleVentaController {
     @Autowired
     private IDetalleVentaService detalleVentaService;
 
-    @GetMapping
-    public ResponseEntity<List<DetalleVentaDTO>> obtenerTodosLosDetalles() {
-        List<DetalleVentaDTO> detalles = detalleVentaService.findAllDetallesVenta();
-        if (detalles.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Collections.emptyList());
-        }
-
-        return ResponseEntity.ok(detalles);
-    }
     @GetMapping("/buscar")
     public ResponseEntity<List<DetalleVentaDTO>> buscarPorParametros(
-            @RequestParam(required = false) String producto,
-            @RequestParam(required = false) String categoria,
-            @RequestParam(required = false) Integer minCantidad,
-            @RequestParam(required = false) List<String> sucursales,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
-       //excepcion RecursoNoEncontrado esta en el servicio
-        if (minCantidad != null && minCantidad < 0) {
-            throw new DatosInvalidos("La cantidad mínima no puede ser negativa.");
-        }
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
+            @RequestParam(required = false) List<String> sucursales) {
 
-        List<DetalleVentaDTO> resultados = detalleVentaService.buscarPorParametros(
-                producto, categoria, minCantidad, sucursales, fecha);
+        List<DetalleVentaDTO> resultados = detalleVentaService.buscarPorParametros(fecha, sucursales);
 
         return ResponseEntity.ok(resultados);
     }
-
-
-
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarPorId(@PathVariable Long id) {
         if (id <= 0) {
             throw new DatosInvalidos("ID inválido para eliminar.");
         }
-        detalleVentaService.eliminarDetalleVenta(id);
+
+        try {
+            detalleVentaService.eliminarDetalleVenta(id);
+        } catch (RecursoNoEncontrado e) {
+            throw new RecursoNoEncontrado("No se pudo eliminar, no se encontró el detalle con ID: " + id);
+        }
+
         return ResponseEntity.ok("Detalle eliminado exitosamente");
     }
+
+
 
 
 }

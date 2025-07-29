@@ -5,8 +5,6 @@ import com.example.demo.dtos.DetalleVentaDTO;
 import com.example.demo.dtos.DetalleVentaInputDTO;
 import com.example.demo.entities.DetalleVenta;
 import com.example.demo.entities.Producto;
-import com.example.demo.entities.Sucursal;
-import com.example.demo.entities.Venta;
 import com.example.demo.exceptions.RecursoNoEncontrado;
 import com.example.demo.repositories.DetalleVentaRepository;
 import com.example.demo.repositories.ProductoRepository;
@@ -31,49 +29,38 @@ public class DetalleVentaService implements IDetalleVentaService {
     @Override
     public List<DetalleVentaDTO> findAllDetallesVenta() {
         List<DetalleVenta> detalles = detalleVentaRepository.findAll();
+
+        if (detalles == null || detalles.isEmpty()) {
+            throw new RecursoNoEncontrado("No hay detalles de venta registrados.");
+        }
+
         return detalles.stream()
                 .map(detalle -> {
-                    Producto producto = detalle.getProducto();
+                    if (detalle == null || detalle.getProducto() == null || detalle.getVenta() == null) {
+                        throw new IllegalArgumentException("Detalle de venta incompleto o nulo.");
+                    }
+
                     return new DetalleVentaDTO(
                             detalle.getId(),
-                            LocalDate.now(),
                             detalle.getCantidad(),
-                            producto.getNombre(),
-                            "Sucursal ejemplo");
+                            detalle.getProducto().getNombre(),
+                            detalle.getVenta().getFecha(),
+                            detalle.getVenta().getSucursal().getNombre()
+                    );
                 })
                 .collect(Collectors.toList());
-
     }
     @Override
-    public List<DetalleVentaDTO> buscarPorParametros(String nombreProducto, String categoria,
-                                                     Integer cantidadMinima, List<String> sucursales, LocalDate fecha) {
+    public List<DetalleVentaDTO> buscarPorParametros(LocalDate fecha, List<String> sucursales) {
         List<DetalleVenta> detalles = detalleVentaRepository.findAll()
                 .stream()
-                .filter(detalle -> {
-                    Producto producto = detalle.getProducto();
-                    Venta venta = detalle.getVenta();
-                    Sucursal sucursal = venta.getSucursal();
-
-
-                    boolean coincideNombre = nombreProducto == null ||
-                            producto.getNombre().toLowerCase().contains(nombreProducto.toLowerCase());
-
-                    boolean coincideCategoria = categoria == null ||
-                            producto.getCategoria().toLowerCase().contains(categoria.toLowerCase());
-
-                    boolean cantidadValida = cantidadMinima == null ||
-                            detalle.getCantidad() >= cantidadMinima;
-
-                    boolean coincideSucursal = sucursales == null || sucursales.stream()
-                            .map(String::toLowerCase)
-                            .anyMatch(s -> sucursal.getNombre().toLowerCase().contains(s));
-
-                    boolean coincideFecha = fecha == null || venta.getFecha().equals(fecha);
-
-                    return coincideNombre && coincideCategoria &&
-                            cantidadValida && coincideSucursal && coincideFecha;
-                })
-                .sorted(Comparator.comparing(DetalleVenta::getCantidad))
+                .filter(detalle ->
+                        (fecha == null || detalle.getVenta().getFecha().equals(fecha)) &&
+                                (sucursales == null || sucursales.stream()
+                                        .map(String::toLowerCase)
+                                        .anyMatch(s -> detalle.getVenta().getSucursal().getNombre().toLowerCase().contains(s)))
+                )
+                .sorted(Comparator.comparing(detalle -> detalle.getVenta().getFecha()))
                 .collect(Collectors.toList());
 
         if (detalles.isEmpty()) {
@@ -81,41 +68,51 @@ public class DetalleVentaService implements IDetalleVentaService {
         }
 
         return detalles.stream()
-                .map(detalle -> new DetalleVentaDTO(
-                        detalle.getId(),
-                        detalle.getVenta().getFecha(),
-                        detalle.getCantidad(),
-                        detalle.getProducto().getNombre(),
-                        detalle.getVenta().getSucursal().getNombre()
-                ))
+                .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
+
     @Override
     public void eliminarDetalleVenta(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID inválido para eliminar.");
+        }
+
         if (!detalleVentaRepository.existsById(id)) {
             throw new RecursoNoEncontrado("El detalle de venta con ID " + id + " no existe.");
         }
+
         detalleVentaRepository.deleteById(id);
     }
 
 
     public static DetalleVenta toEntity(DetalleVentaInputDTO dto, Producto producto) {
+        if (dto == null || producto == null) {
+            throw new IllegalArgumentException("Datos de entrada inválidos para crear detalle de venta.");
+        }
+
         DetalleVenta detalle = new DetalleVenta();
         detalle.setProducto(producto);
         detalle.setCantidad(dto.getCantidad());
         return detalle;
     }
 
-    public static DetalleVentaDTO toDTO(DetalleVenta detalle) {
+    public DetalleVentaDTO toDTO(DetalleVenta detalleVenta) {
+        if (detalleVenta == null ||
+                detalleVenta.getProducto() == null ||
+                detalleVenta.getVenta() == null ||
+                detalleVenta.getVenta().getSucursal() == null) {
+            throw new IllegalArgumentException("Detalle de venta incompleto para transformar a DTO.");
+        }
+
         return new DetalleVentaDTO(
-                detalle.getId(),
-                LocalDate.now(),
-                detalle.getCantidad(),
-                detalle.getProducto().getNombre(),
-                "Sucursal ejemplo"
+                detalleVenta.getId(),
+                detalleVenta.getVenta().getFecha(),
+                detalleVenta.getCantidad(),
+                detalleVenta.getProducto().getNombre(),
+                detalleVenta.getVenta().getSucursal().getNombre()
         );
     }
-
 }
 
