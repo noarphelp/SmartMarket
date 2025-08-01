@@ -7,9 +7,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface IDetalleVentaService {
-    List<DetalleVentaDTO> findAllDetallesVenta();
 
-    List<DetalleVentaDTO> buscarPorParametros(LocalDate fecha, List<String> sucursales);
+
+    List<DetalleVentaDTO> buscarPorParametros(LocalDate fecha, String sucursal);
 
     void eliminarDetalleVenta(Long id);
 }

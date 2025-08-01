@@ -2,6 +2,7 @@ package com.example.demo.services.implementations;
 
 import com.example.demo.dtos.ProductoDTO;
 import com.example.demo.entities.Producto;
+import com.example.demo.exceptions.DatosInvalidos;
 import com.example.demo.repositories.ProductoRepository;
 import com.example.demo.services.interfaces.IProductoService;
 import com.example.demo.exceptions.RecursoNoEncontrado;
@@ -18,26 +19,29 @@ public class ProductoService implements IProductoService {
     private ProductoRepository productoRepository;
 
     @Override
-    public void crearProducto(ProductoDTO dto) {
-        if (dto == null || dto.getNombre() == null || dto.getNombre().trim().isEmpty()) {
-            throw new IllegalArgumentException("El DTO de producto o su nombre no puede ser nulo o vacío.");
+    public ProductoDTO crearProducto(ProductoDTO dto) {
+        if (dto.getNombre().trim().isEmpty() ||
+                dto.getCategoria().trim().isEmpty() ||
+                dto.getPrecio() == null) {
+            throw new RecursoNoEncontrado("Nombre, categoría o precio del producto no pueden estar vacíos.");
         }
 
         Producto existente = productoRepository.findByNombre(dto.getNombre());
-        if (existente != null) {
-            throw new IllegalArgumentException("Ya existe un producto con el nombre: " + dto.getNombre());
+        if (existente == null) {
+            throw new DatosInvalidos("Ya existe un producto con el nombre: " + dto.getNombre());
         }
 
         Producto producto = toEntity(dto);
         productoRepository.save(producto);
 
+        return dto;
     }
 
     @Override
     public ProductoDTO actualizarProducto(Long id, ProductoDTO dto) {
         Producto producto = productoRepository.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontrado("Producto con ID " + id + " no encontrado"));
-
+        producto.setId(dto.getId());
         producto.setNombre(dto.getNombre());
         producto.setCategoria(dto.getCategoria());
         producto.setPrecio(dto.getPrecio());
@@ -48,14 +52,11 @@ public class ProductoService implements IProductoService {
 
     @Override
     public ProductoDTO obtenerProductoPorId(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("El ID no puede ser nulo.");
-        }
-
-        Producto producto = productoRepository.findById(id)
-                .orElseThrow(() -> new RecursoNoEncontrado("Producto con ID " + id + " no encontrado."));
-        return toDTO(producto);
+        return productoRepository.findById(id)
+                .map(ProductoService::toDTO)
+                .orElseThrow(() -> new RecursoNoEncontrado("No se encontró ningún producto con el ID: " + id));
     }
+
 
 
     @Override
@@ -72,21 +73,15 @@ public class ProductoService implements IProductoService {
     }
     @Override
     public void eliminarProducto(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("El ID no puede ser nulo.");
-        }
-
-        if (!productoRepository.existsById(id)) {
-            throw new RecursoNoEncontrado("Producto con ID " + id + " no existe.");
-        }
+        productoRepository.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontrado("Producto con ID " + id + " no existe."));
 
         productoRepository.deleteById(id);
     }
 
+
     public static ProductoDTO toDTO(Producto producto) {
-        if (producto == null) {
-            throw new IllegalArgumentException("El producto no puede ser nulo.");
-        }
+
 
         return new ProductoDTO(
                 producto.getId(),
@@ -98,9 +93,7 @@ public class ProductoService implements IProductoService {
 }
 
 public static Producto toEntity(ProductoDTO dto) {
-    if (dto == null) {
-        throw new IllegalArgumentException("El DTO de producto no puede ser nulo.");
-    }
+
 
     Producto producto = new Producto();
     producto.setId(dto.getId());
