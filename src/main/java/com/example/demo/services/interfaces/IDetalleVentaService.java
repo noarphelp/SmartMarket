@@ -1,17 +1,21 @@
 package com.example.demo.services.interfaces;
 
 import com.example.demo.dtos.DetalleVentaDTO;
-import com.example.demo.dtos.DetalleVentaInputDTO;
+import com.example.demo.entities.DetalleVenta;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface IDetalleVentaService {
 
+    List<DetalleVentaDTO> faindAll();
 
-    List<DetalleVentaDTO> buscarPorParametros(LocalDate fecha, String sucursal);
+    List<DetalleVentaDTO> findByParameter(LocalDate fecha, String sucursal);
 
-    void eliminarDetalleVenta(Long id);
+    public void delete(Long id);
+
+    //Mapeadores
+    DetalleVentaDTO convertirADTO(DetalleVenta detalleVenta);
+
+    DetalleVenta convertirAOBJ(DetalleVentaDTO detalleVenta);
 }
-
-

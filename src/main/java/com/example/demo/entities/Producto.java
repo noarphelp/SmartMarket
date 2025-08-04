@@ -1,10 +1,12 @@
 package com.example.demo.entities;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,7 +19,7 @@ import java.util.List;
 @Table(name = "producto")
 public class Producto {
 
-   @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;

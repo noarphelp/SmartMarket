@@ -1,78 +1,71 @@
 package com.example.demo.controllers;
 
-
 import com.example.demo.dtos.ProductoDTO;
+import com.example.demo.responses.StandardResponse;
 import com.example.demo.services.interfaces.IProductoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/productos")
+@RequestMapping("/api/producto")
 public class ProductoController {
 
-    @Autowired
-    private IProductoService productoService;
+    private final IProductoService productoService;
 
-    // Listar productos
+    public ProductoController(IProductoService productoService) {
+        this.productoService = productoService;
+    }
+
+
     @GetMapping
-    public ResponseEntity<?> listarProductos() {
-        List<ProductoDTO> productos = productoService.obtenerTodosLosProductos();
-        if (productos.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No hay productos registrados.");
+    public ResponseEntity<StandardResponse<List<ProductoDTO>>> findAll() {
+        List<ProductoDTO> list = productoService.finAll();
+
+        if (!list.isEmpty()) {
+            return ResponseEntity.ok(new StandardResponse<>("Consulta exitosa", list));
         }
-        return ResponseEntity.ok(productos);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new StandardResponse<>("Fallo al cargar lista de productos", null));
     }
 
-    // Crear producto
     @PostMapping
-    public ResponseEntity<?> crearProducto(@RequestBody ProductoDTO productoDTO) {
-        ProductoDTO nuevoProducto = productoService.crearProducto(productoDTO);
-        if (nuevoProducto == null) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al crear el producto.");
+    public ResponseEntity<String> create(@RequestBody ProductoDTO productoDTO) {
+
+        if (productoDTO.getNombre().isEmpty() || productoDTO.getCategoria().isEmpty() || productoDTO.getPrecio() == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fallo al crear un nuevo producto, los datos no pueden estar vacíos.");
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body("Producto creado");
+
+        productoService.create(productoDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body("El producto se a creado exitosamente.");
     }
 
-    // Actualizar producto
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarProducto(@PathVariable Long id, @RequestBody ProductoDTO productoDTO) {
-        try {
-            ProductoDTO actualizado = productoService.actualizarProducto(id, productoDTO);
-            return ResponseEntity.ok(actualizado);
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No se encontró el producto con ID: " + id);
+    public ResponseEntity<String> update(@RequestBody ProductoDTO productoDTO, @PathVariable Long id) {
+        if (productoDTO.getNombre().isEmpty() || productoDTO.getCategoria().isEmpty() || productoDTO.getPrecio() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fallo al actualizar un producto, los datos no pueden estar vacíos.");
         }
+
+        Optional<ProductoDTO> productoExistente = productoService.faindById(id);
+        if (productoExistente.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El producto con ID " + id + " no existe.");
+        }
+
+        ProductoDTO actualizado = productoService.update(productoDTO, id);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("El producto seleccionado se ha actualizado correctamente.\n" + actualizado);
     }
 
-    // Eliminar producto
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminarProducto(@PathVariable Long id) {
-        try {
-            productoService.eliminarProducto(id);
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        Optional<ProductoDTO> producto = productoService.faindById(id);
+        if (producto.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se a podido eliminar el producto, o id invalido.");
+        else {
+            productoService.delete(id);
             return ResponseEntity.ok("Producto eliminado exitosamente.");
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No se pudo eliminar, no se encontró el producto con ID: " + id);
-        }
-    }
-
-    // Obtener producto por ID
-    @GetMapping("/{id}")
-    public ResponseEntity<?> obtenerProductoPorId(@PathVariable Long id) {
-        try {
-            ProductoDTO producto = productoService.obtenerProductoPorId(id);
-            return ResponseEntity.ok(producto);
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No se encontró el producto con ID: " + id);
         }
     }
 }

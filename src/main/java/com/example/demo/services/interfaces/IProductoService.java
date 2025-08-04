@@ -1,25 +1,26 @@
 package com.example.demo.services.interfaces;
 
-
 import com.example.demo.dtos.ProductoDTO;
+import com.example.demo.entities.Producto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IProductoService {
 
-    // Obtener producto por ID
-    ProductoDTO obtenerProductoPorId(Long id);
+    List<ProductoDTO> finAll();
 
-    // Obtener todos los productos
-    List<ProductoDTO> obtenerTodosLosProductos();
+    void create(ProductoDTO productoDTO);
 
-    // Crear producto
-    ProductoDTO crearProducto(ProductoDTO productoDTO);
+    ProductoDTO update(ProductoDTO productoDTO, Long id);
 
-    // Actualizar producto
-    ProductoDTO actualizarProducto(Long id, ProductoDTO productoDTO);
+    void delete(Long id);
 
-    // Eliminar producto
-    void eliminarProducto(Long id);
+    Optional<ProductoDTO> faindById(Long id);
+
+    //Mapeadores
+
+    ProductoDTO convertirADTO(Producto producto);
+
+    Producto convertirAOBJ(ProductoDTO productoDTO);
 }
-

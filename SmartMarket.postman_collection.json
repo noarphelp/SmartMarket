@@ -27,13 +27,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/producto",
+					"raw": "http://localhost:8080/api/producto",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"producto"
 					]
 				},
@@ -61,13 +62,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/sucursal",
+					"raw": "http://localhost:8080/api/sucursal",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"sucursal"
 					]
 				},
@@ -95,13 +97,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/detalleVenta",
+					"raw": "http://localhost:8080/api/detalleVenta",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"detalleVenta"
 					]
 				},
@@ -129,13 +132,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/detalleVenta?fecha=2025-07-15&sucursal=sucursal principal",
+					"raw": "http://localhost:8080/api/detalleVenta?fecha=2025-07-15&sucursal=sucursal centra",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"detalleVenta"
 					],
 					"query": [
@@ -145,7 +149,7 @@
 						},
 						{
 							"key": "sucursal",
-							"value": "sucursal principal"
+							"value": "sucursal centra"
 						}
 					]
 				},
@@ -175,7 +179,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"nombre\": \"pepinillo\",\n    \"categoria\": \"verdura\",\n    \"precio\": 1.20\n\n}",
+					"raw": "{\n\t\"nombre\": \"\",\n    \"categoria\": \"verdura\",\n    \"precio\": 1.20\n\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -183,13 +187,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/producto",
+					"raw": "http://localhost:8080/api/producto",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"producto"
 					]
 				},
@@ -219,7 +224,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"nombre\": \"Sucursal Coruña\",\n    \"direccion\": \"Alfonso Molina nº4\",\n    \"ciudad\": \"A Coruña\"\n}",
+					"raw": "{\n\t\"nombre\": \"Sucursal Coruña\",\n    \"direccion\": \"Alfonso Molina nº4\",\n    \"ciudad\": \"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -227,13 +232,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/sucursal",
+					"raw": "http://localhost:8080/api/sucursal",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"sucursal"
 					]
 				},
@@ -263,7 +269,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"sucursalId\": 31,\n    \"productoId\": 4,\n    \"cantidad\": 7\n}",
+					"raw": "{\n\t\"sucursalId\": 2,\n    \"productoId\": 48,\n    \"cantidad\": 3\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -271,13 +277,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/venta",
+					"raw": "http://localhost:8080/api/venta",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"venta"
 					]
 				},
@@ -307,7 +314,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"nombre\": \"Filete\",\n    \"categoria\": \"Carnes\",\n    \"precio\": 4.70\n}",
+					"raw": "{\n\t\"nombre\": \"\",\n    \"categoria\": \"Carnes\",\n    \"precio\": 4.70\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -315,15 +322,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/producto/7",
+					"raw": "http://localhost:8080/api/producto/6",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"producto",
-						"7"
+						"6"
 					]
 				},
 				"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
@@ -352,7 +360,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"nombre\": \"Sucursal principal\",\n    \"direccion\": \"Romero do nallo nº5\",\n    \"ciudad\": \"Santiago\"\n}",
+					"raw": "{\n\t\"nombre\": \"\",\n    \"direccion\": \"Romero do nallo nº5\",\n    \"ciudad\": \"Santiago\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -360,13 +368,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/sucursal/4",
+					"raw": "http://localhost:8080/api/sucursal/4",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"sucursal",
 						"4"
 					]
@@ -405,15 +414,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/producto/11",
+					"raw": "http://localhost:8080/api/producto/6",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"producto",
-						"11"
+						"6"
 					]
 				},
 				"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
@@ -450,15 +460,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/sucursal/4",
+					"raw": "http://localhost:8080/api/sucursal/3",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"sucursal",
-						"4"
+						"3"
 					]
 				},
 				"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
@@ -495,15 +506,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/venta/7",
+					"raw": "http://localhost:8080/api/venta/5",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"venta",
-						"7"
+						"5"
 					]
 				},
 				"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."

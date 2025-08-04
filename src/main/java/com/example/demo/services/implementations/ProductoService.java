@@ -2,106 +2,80 @@ package com.example.demo.services.implementations;
 
 import com.example.demo.dtos.ProductoDTO;
 import com.example.demo.entities.Producto;
-import com.example.demo.exceptions.DatosInvalidos;
-import com.example.demo.repositories.ProductoRepository;
-import com.example.demo.services.interfaces.IProductoService;
 import com.example.demo.exceptions.RecursoNoEncontrado;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.mappers.ProductoMapper;
+import com.example.demo.repositories.ProductoRepository;
+import com.example.demo.services.interfaces.IDetalleVentaService;
+import com.example.demo.services.interfaces.IProductoService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class ProductoService implements IProductoService {
+    private final ProductoRepository repository;
+    private final ProductoMapper mapper;
 
-    @Autowired
-    private ProductoRepository productoRepository;
-
-    @Override
-    public ProductoDTO crearProducto(ProductoDTO dto) {
-        if (dto.getNombre().trim().isEmpty() ||
-                dto.getCategoria().trim().isEmpty() ||
-                dto.getPrecio() == null) {
-            throw new RecursoNoEncontrado("Nombre, categoría o precio del producto no pueden estar vacíos.");
-        }
-
-        Producto existente = productoRepository.findByNombre(dto.getNombre());
-        if (existente == null) {
-            throw new DatosInvalidos("Ya existe un producto con el nombre: " + dto.getNombre());
-        }
-
-        Producto producto = toEntity(dto);
-        productoRepository.save(producto);
-
-        return dto;
+    public ProductoService(ProductoRepository repository, ProductoMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
     }
 
     @Override
-    public ProductoDTO actualizarProducto(Long id, ProductoDTO dto) {
-        Producto producto = productoRepository.findById(id)
-                .orElseThrow(() -> new RecursoNoEncontrado("Producto con ID " + id + " no encontrado"));
-        producto.setId(dto.getId());
-        producto.setNombre(dto.getNombre());
-        producto.setCategoria(dto.getCategoria());
-        producto.setPrecio(dto.getPrecio());
-
-        Producto actualizado = productoRepository.save(producto);
-        return toDTO(actualizado);
-    }
-
-    @Override
-    public ProductoDTO obtenerProductoPorId(Long id) {
-        return productoRepository.findById(id)
-                .map(ProductoService::toDTO)
-                .orElseThrow(() -> new RecursoNoEncontrado("No se encontró ningún producto con el ID: " + id));
-    }
-
-
-
-    @Override
-    public List<ProductoDTO> obtenerTodosLosProductos() {
-        List<Producto> productos = productoRepository.findAll();
-
-        if (productos == null || productos.isEmpty()) {
-            throw new RecursoNoEncontrado("No hay productos disponibles.");
-        }
-
+    public List<ProductoDTO> finAll() {
+        List<Producto> productos = repository.findAll();
         return productos.stream()
-                .map(ProductoService::toDTO)
-                .collect(Collectors.toList());
+                .map(this::convertirADTO)
+                .toList();
     }
+
     @Override
-    public void eliminarProducto(Long id) {
-        productoRepository.findById(id)
-                .orElseThrow(() -> new RecursoNoEncontrado("Producto con ID " + id + " no existe."));
-
-        productoRepository.deleteById(id);
+    public Optional<ProductoDTO> faindById(Long id) {
+        Optional<Producto> existente = repository.findById(id);
+        if (!existente.isEmpty()) {
+            return repository.findById(id)
+                    .map(this::convertirADTO);
+        }
+        throw new RecursoNoEncontrado("Producto con ID " + id + " no encontrado.");
     }
 
+    @Override
+    public void create(ProductoDTO productoDTO) {
+        Producto producto = convertirAOBJ(productoDTO);
+        repository.save(producto);
+    }
 
-    public static ProductoDTO toDTO(Producto producto) {
+    @Override
+    public ProductoDTO update(ProductoDTO productoDTO, Long id) {
+        Optional<Producto> existente = repository.findById(id);
+        if (existente.isEmpty()) {
+            throw new RecursoNoEncontrado("Producto con ID " + id + " no encontrado.");
+        }
 
+        Producto producto = convertirAOBJ(productoDTO);
+        producto.setId(id);
+        repository.save(producto);
+        return convertirADTO(producto);
+    }
 
-        return new ProductoDTO(
-                producto.getId(),
-                producto.getNombre(),
-                producto.getCategoria(),
-                producto.getPrecio()
-        );
+    @Override
+    public void delete(Long id) {
 
+        repository.deleteById(id);
+
+    }
+
+    //Mapeadores
+    @Override
+    public ProductoDTO convertirADTO(Producto producto) {
+        return mapper.toADTO(producto);
+    }
+
+    @Override
+    public Producto convertirAOBJ(ProductoDTO productoDTO) {
+
+        return mapper.toEntity(productoDTO);
+    }
 }
-
-public static Producto toEntity(ProductoDTO dto) {
-
-
-    Producto producto = new Producto();
-    producto.setId(dto.getId());
-    producto.setNombre(dto.getNombre());
-    producto.setCategoria(dto.getCategoria());
-    producto.setPrecio(dto.getPrecio());
-    return producto;
-}
-}
-
-

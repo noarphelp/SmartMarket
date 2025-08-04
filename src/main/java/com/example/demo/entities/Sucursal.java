@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 import java.util.List;
 
 @Entity
@@ -24,5 +25,5 @@ public class Sucursal {
     private String ciudad;
 
     @OneToMany(mappedBy = "sucursal", cascade = CascadeType.ALL)
-    private List<Venta>ventas;
+    private List<Venta> ventas;
 }

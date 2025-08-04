@@ -1,5 +1,6 @@
 package com.example.demo.dtos;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,5 +20,5 @@ public class SucursalDTO {
     private String ciudad;
 
     @JsonIgnore
-    private List<VentaDTO>ventas;
+    private List<VentaDTO> ventas;
 }

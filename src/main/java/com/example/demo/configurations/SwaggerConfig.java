@@ -9,8 +9,8 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI().info(new Info()
-                .title("App SmartMarket")
+                .title("SmartMarket")
                 .version("1.1.1")
-                .description("Aplicación para la gestión de ventas de un supermercado"));
+                .description("Aplicación para la gestión de cuentas de un supermercado"));
     }
 }

@@ -1,7 +1,10 @@
 -- 🚩 Sucursales
 INSERT INTO sucursal (id, nombre, direccion, ciudad) VALUES 
 (1, 'Sucursal Central', 'Av. Siempre Viva 123', 'Springfield'),
-(2, 'Sucursal Norte', 'Calle Falsa 456', 'Shelbyville');
+(2, 'Sucursal Norte', 'Calle Falsa 456', 'Shelbyville'),
+(3, 'Sucursal Este', 'Ruta 9 km 45', 'Capital Federal'),
+(4, 'Sucursal Sur', 'Boulevard 789', 'San Miguel'),
+(5, 'Sucursal Oeste', 'Camino Real 111', 'Lanús');
 
 -- 🛒 Productos
 INSERT INTO producto (id, nombre, precio, categoria) VALUES 
@@ -9,17 +12,43 @@ INSERT INTO producto (id, nombre, precio, categoria) VALUES
 (2, 'Agua', 1.0, 'Bebidas'),
 (3, 'Detergente', 5.2, 'Limpieza'),
 (4, 'Aceite', 4.0, 'Alimentos'),
-(5, 'Cereal', 4.5, 'Alimentos');
+(5, 'Cereal', 4.5, 'Alimentos'),
+(6, 'Jabón', 2.5, 'Limpieza'),
+(7, 'Leche', 1.8, 'Bebidas'),
+(8, 'Pan', 1.2, 'Alimentos'),
+(9, 'Galletas', 3.0, 'Alimentos'),
+(10, 'Refresco', 2.0, 'Bebidas');
 
 -- 🧾 Ventas (2 ventas, una por sucursal)
 INSERT INTO venta (id, fecha, sucursal_id) VALUES 
 (1, '2025-07-15', 1),
-(2, '2025-07-16', 2);
+(2, '2025-07-16', 2),
+(3, '2025-07-17', 3),
+(4, '2025-07-18', 4),
+(5, '2025-07-18', 1),
+(6, '2025-07-19', 2),
+(7, '2025-07-20', 5),
+(8, '2025-07-22', 3),
+(9, '2025-07-22', 4);
 
 -- 📦 Detalle de Ventas (productos vendidos en cada venta)
 INSERT INTO detalle_venta (id, cantidad, venta_id, producto_id) VALUES 
-(1, 2, 1, 1),  -- 2x Arroz en venta 1
-(2, 1, 1, 2),  -- 1x Agua en venta 1
-(3, 3, 2, 3),  -- 3x Detergente en venta 2
-(4, 1, 2, 4);  -- 1x Aceite en venta 2
+(1, 2, 1, 1),  
+(2, 1, 1, 2),  
+(3, 3, 2, 3),  
+(4, 1, 2, 4),  
+(5, 1, 3, 6),  
+(6, 2, 3, 7),  
+(7, 3, 4, 8),  
+(8, 1, 4, 1),  
+(9, 2, 5, 9),  
+(10, 1, 5, 10), 
+(11, 2, 6, 2),  
+(12, 1, 6, 5),  
+(13, 4, 7, 7),  
+(14, 2, 7, 6),  
+(15, 1, 8, 3),  
+(16, 1, 8, 4),  
+(17, 2, 9, 10), 
+(18, 1, 9, 8);  
 
