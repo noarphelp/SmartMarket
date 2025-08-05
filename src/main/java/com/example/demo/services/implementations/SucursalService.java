@@ -27,7 +27,7 @@ public class SucursalService implements ISucursalService {
     }
 
     @Override
-    public List<SucursalDTO> finAll() {
+    public List<SucursalDTO> fainAll() {
         return repository.findAll()
                 .stream()
                 .map(this::convertirADTO)

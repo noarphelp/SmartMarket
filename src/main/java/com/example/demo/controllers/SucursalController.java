@@ -23,7 +23,7 @@ public class SucursalController {
 
     @GetMapping
     public ResponseEntity<StandardResponse<List<SucursalDTO>>> findAll() {
-        List<SucursalDTO> list = sucursalService.finAll();
+        List<SucursalDTO> list = sucursalService.fainAll();
 
         if (!list.isEmpty())
             return ResponseEntity.ok(new StandardResponse<>("Consulta exitosa", list));
