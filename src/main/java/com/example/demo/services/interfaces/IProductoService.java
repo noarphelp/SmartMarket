@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface IProductoService {
 
-    List<ProductoDTO> finAll();
+    List<ProductoDTO> findAll();
 
     void create(ProductoDTO productoDTO);
 
@@ -16,7 +16,7 @@ public interface IProductoService {
 
     void delete(Long id);
 
-    Optional<ProductoDTO> faindById(Long id);
+    Optional<ProductoDTO> findById(Long id);
 
     //Mapeadores
 

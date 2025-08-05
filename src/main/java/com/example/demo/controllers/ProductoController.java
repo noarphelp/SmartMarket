@@ -23,7 +23,7 @@ public class ProductoController {
 
     @GetMapping
     public ResponseEntity<StandardResponse<List<ProductoDTO>>> findAll() {
-        List<ProductoDTO> list = productoService.finAll();
+        List<ProductoDTO> list = productoService.findAll();
 
         if (!list.isEmpty()) {
             return ResponseEntity.ok(new StandardResponse<>("Consulta exitosa", list));
@@ -48,7 +48,7 @@ public class ProductoController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fallo al actualizar un producto, los datos no pueden estar vacíos.");
         }
 
-        Optional<ProductoDTO> productoExistente = productoService.faindById(id);
+        Optional<ProductoDTO> productoExistente = productoService.findById(id);
         if (productoExistente.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El producto con ID " + id + " no existe.");
         }
@@ -60,7 +60,7 @@ public class ProductoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
-        Optional<ProductoDTO> producto = productoService.faindById(id);
+        Optional<ProductoDTO> producto = productoService.findById(id);
         if (producto.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se a podido eliminar el producto, o id invalido.");
         else {
