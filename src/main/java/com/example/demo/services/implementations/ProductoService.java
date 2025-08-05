@@ -5,9 +5,9 @@ import com.example.demo.entities.Producto;
 import com.example.demo.exceptions.RecursoNoEncontrado;
 import com.example.demo.mappers.ProductoMapper;
 import com.example.demo.repositories.ProductoRepository;
-import com.example.demo.services.interfaces.IDetalleVentaService;
+
 import com.example.demo.services.interfaces.IProductoService;
-import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class ProductoService implements IProductoService {
     }
 
     @Override
-    public List<ProductoDTO> finAll() {
+    public List<ProductoDTO> findAll() {
         List<Producto> productos = repository.findAll();
         return productos.stream()
                 .map(this::convertirADTO)
@@ -32,7 +32,7 @@ public class ProductoService implements IProductoService {
     }
 
     @Override
-    public Optional<ProductoDTO> faindById(Long id) {
+    public Optional<ProductoDTO> findById(Long id) {
         Optional<Producto> existente = repository.findById(id);
         if (!existente.isEmpty()) {
             return repository.findById(id)

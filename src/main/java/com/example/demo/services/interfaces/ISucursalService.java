@@ -9,7 +9,9 @@ import java.util.Optional;
 
 public interface ISucursalService {
 
-    List<SucursalDTO> fainAll();
+
+    List<SucursalDTO> findAll();
+
 
     Optional<SucursalDTO> findById(Long id);
 
