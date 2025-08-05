@@ -14,8 +14,8 @@ Incluye entidades, servicios, controladores, excepciones, y pruebas unitarias e 
 ## Estructura del Proyecto 🏗️​
 
 - **src/main/java**: Código fuente (controladores, servicios, entidades, DTOs, excepciones, mappers, repositorios)
-- **src/test/java**: Tests unitarios y de integración para sucursal y venta.
-- **database.sql**: Script SQL para crear la base de datos y cargar datos de ejemplo.
+- **src/test/java**: Tests unitarios y de integración para sucursal ,producto y detalleVenta.
+- **sqlDePrueba.txt**: Script SQL para crear la base de datos y cargar datos de ejemplo.
 - **postman_collection.json**: Colección Postman para probar los endpoints de la API.
 
 ---
