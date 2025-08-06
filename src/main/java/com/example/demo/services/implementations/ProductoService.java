@@ -17,12 +17,12 @@ import java.util.Optional;
 public class ProductoService implements IProductoService {
     private final ProductoRepository repository;
     private final ProductoMapper mapper;
-
+    // Constructor que inyecta el repositorio y el mapper
     public ProductoService(ProductoRepository repository, ProductoMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
-
+//Obtiene todos los productos de la base de datos y los convierte a DTO
     @Override
     public List<ProductoDTO> findAll() {
         List<Producto> productos = repository.findAll();
@@ -30,7 +30,7 @@ public class ProductoService implements IProductoService {
                 .map(this::convertirADTO)
                 .toList();
     }
-
+// Busca un producto por su ID si lo encuentra, lo convierte a DTO y lo devuelve si no, lanza una excepción personalizada
     @Override
     public Optional<ProductoDTO> findById(Long id) {
         Optional<Producto> existente = repository.findById(id);
@@ -40,13 +40,13 @@ public class ProductoService implements IProductoService {
         }
         throw new RecursoNoEncontrado("Producto con ID " + id + " no encontrado.");
     }
-
+//Crea un nuevo producto en la base de datos a partir de un DTO
     @Override
     public void create(ProductoDTO productoDTO) {
         Producto producto = convertirAOBJ(productoDTO);
         repository.save(producto);
     }
-
+//Actualiza un producto existente con nuevos datos Si el producto no existe, lanza una excepción, devuelve el DTO actualizado
     @Override
     public ProductoDTO update(ProductoDTO productoDTO, Long id) {
         Optional<Producto> existente = repository.findById(id);
@@ -59,6 +59,7 @@ public class ProductoService implements IProductoService {
         repository.save(producto);
         return convertirADTO(producto);
     }
+    // Elimina un producto por su ID no lanza excepción si el ID no existe (puedes agregar validación si lo deseas)
 
     @Override
     public void delete(Long id) {
@@ -68,11 +69,12 @@ public class ProductoService implements IProductoService {
     }
 
     //Mapeadores
+    //Convierte una entidad Producto a su correspondiente DTO
     @Override
     public ProductoDTO convertirADTO(Producto producto) {
         return mapper.toADTO(producto);
     }
-
+   //Convierte un DTO Producto a su correspondiente entidad
     @Override
     public Producto convertirAOBJ(ProductoDTO productoDTO) {
 

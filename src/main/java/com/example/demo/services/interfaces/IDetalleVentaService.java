@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IDetalleVentaService {
 
-    List<DetalleVentaDTO> faindAll();
+    List<DetalleVentaDTO> findAll();
 
     List<DetalleVentaDTO> findByParameter(LocalDate fecha, String sucursal);
 

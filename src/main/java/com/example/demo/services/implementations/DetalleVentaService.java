@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class DetalleVentaService implements IDetalleVentaService {
-
+    // Constructor para inyectar el mapper y el repositorio
     private final DetalleVentaMapper mapper;
     private final DetalleVentaRepository repository;
 
@@ -24,8 +24,8 @@ public class DetalleVentaService implements IDetalleVentaService {
         this.mapper = mapper;
         this.repository = repository;
     }
-
-    public List<DetalleVentaDTO> faindAll() {
+//obtener todos los registros y los convierte en DTO
+    public List<DetalleVentaDTO> findAll() {
 
         return repository.findAll()
                 .stream()
@@ -33,10 +33,10 @@ public class DetalleVentaService implements IDetalleVentaService {
                 .toList();
     }
 
-
+//filtrar los detalles de venta por fecha y/o sucursal si los parametros nulos no se aplican los filtros lo contrario se ordena por fecha
     @Override
     public List<DetalleVentaDTO> findByParameter(LocalDate fecha, String sucursal) {
-        List<DetalleVentaDTO> list = faindAll();
+        List<DetalleVentaDTO> list = findAll();
 
         return list.stream()
                 .filter(l -> fecha == null || l.getFecha().equals(fecha))
@@ -45,7 +45,7 @@ public class DetalleVentaService implements IDetalleVentaService {
                 .collect(Collectors.toList());
     }
 
-
+//eliminar detalle vente por su iD si no se encuentra lanza la excepcion
     @Override
     public void delete(Long id) {
 
@@ -59,11 +59,12 @@ public class DetalleVentaService implements IDetalleVentaService {
     }
 
     //Mappers
+    //Convierte una entidad DetalleVenta a su correspondiente DTO
     @Override
     public DetalleVentaDTO convertirADTO(DetalleVenta detalleVenta) {
         return mapper.toADTO(detalleVenta);
     }
-
+    //Convierte un DTO DetalleVenta a su correspondiente entidad
     @Override
     public DetalleVenta convertirAOBJ(DetalleVentaDTO detalleVenta) {
         return mapper.toEntity(detalleVenta);
