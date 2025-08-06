@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@Transactional
+@Transactional
 @DisplayName("Test Integración de Productos")
 public class ProductoControllerIntegrationTest {
 
@@ -43,7 +43,7 @@ public class ProductoControllerIntegrationTest {
     public void buscarTodosTest() throws Exception {
         mockMvc.perform(get(URL_ENDPOINT))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.mensaje").value("Consulta exitosa"))
+                .andExpect(jsonPath("$.message").value("Consulta exitosa"))
                 .andExpect(jsonPath("$.data", hasSize(greaterThan(0))));
     }
 
@@ -66,20 +66,21 @@ public class ProductoControllerIntegrationTest {
 
         ProductoDTO productoActualizado = new ProductoDTO(idExistente, "Mouse Pro", "Tecnología", new BigDecimal("59.99"));
 
-        mockMvc.perform(put(URL_ENDPOINT+ "/" + idExistente)
+        mockMvc.perform(put(URL_ENDPOINT + "/" + idExistente)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productoActualizado)))
                 .andExpect(status().isCreated())
                 .andExpect(content().string(containsString("El producto seleccionado se ha actualizado correctamente.")));
     }
-//tengo que poner mi contraseña para que me funcione to*do Fatine
+
+
     @Test
     @DisplayName("Eliminar producto")
     public void eliminarProductoTest() throws Exception {
-        Long idExistente= 1L;
+        Long idExistente = 1L;
 
 
-        mockMvc.perform(delete(URL_ENDPOINT+ "/" + idExistente))
+        mockMvc.perform(delete(URL_ENDPOINT + "/" + idExistente))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Producto eliminado exitosamente.")));
     }

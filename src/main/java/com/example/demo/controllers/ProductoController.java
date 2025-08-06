@@ -20,7 +20,7 @@ public class ProductoController {
         this.productoService = productoService;
     }
 
-// Obtiene todos los productos disponibles
+    // Obtiene todos los productos disponibles
     @GetMapping
     public ResponseEntity<StandardResponse<List<ProductoDTO>>> findAll() {
         List<ProductoDTO> list = productoService.findAll();
@@ -32,10 +32,12 @@ public class ProductoController {
         // Si no hay productos, devuelve estado 404 con mensaje de error
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new StandardResponse<>("Fallo al cargar lista de productos", null));
     }
-  // para crear
+
+    // para crear
     @PostMapping
     public ResponseEntity<String> create(@RequestBody ProductoDTO productoDTO) {
-       // Valida que los campos del producto no estén vacíos
+        // Valida que los campos del producto no estén vacíos
+
         if (productoDTO.getNombre().isEmpty() || productoDTO.getCategoria().isEmpty() || productoDTO.getPrecio() == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fallo al crear un nuevo producto, los datos no pueden estar vacíos.");
         }
@@ -43,10 +45,12 @@ public class ProductoController {
         productoService.create(productoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body("El producto se a creado exitosamente.");
     }
-//para actualizar
+
+    //para actualizar
     @PutMapping("/{id}")
     public ResponseEntity<String> update(@RequestBody ProductoDTO productoDTO, @PathVariable Long id) {
         // Valida que los campos del producto no estén vacíos
+
         if (productoDTO.getNombre().isEmpty() || productoDTO.getCategoria().isEmpty() || productoDTO.getPrecio() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fallo al actualizar un producto, los datos no pueden estar vacíos.");
         }
@@ -60,7 +64,8 @@ public class ProductoController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("El producto seleccionado se ha actualizado correctamente.\n" + actualizado);
     }
-// para eliminar
+
+    // para eliminar
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         // Verifica si el producto con el ID existe

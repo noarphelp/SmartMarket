@@ -20,7 +20,7 @@ public class DetalleVentaController {
         this.detalleVentaService = detalleVentaService;
     }
 
-// Méto*do GET para buscar detalles de venta por fecha y/o sucursal con respuestas de 200 y 400 bad request
+    // Método GET para buscar detalles de venta por fecha y/o sucursal con respuestas de 200 y 400 bad request
     @GetMapping
     public ResponseEntity<StandardResponse<List<DetalleVentaDTO>>> findByParameter(@RequestParam(required = false) LocalDate fecha,
                                                                                    @RequestParam(required = false) String sucursal) {
@@ -31,7 +31,9 @@ public class DetalleVentaController {
         else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StandardResponse<>("Parámetros incorrectos, o no encontrados", null));
     }
-//Mét*odo DELETE para eliminar un detalle de venta por su ID con respuesta 200
+
+
+    //Método DELETE para eliminar un detalle de venta por su ID con respuesta 200
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         detalleVentaService.delete(id);

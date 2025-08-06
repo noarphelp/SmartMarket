@@ -24,7 +24,8 @@ public class DetalleVentaService implements IDetalleVentaService {
         this.mapper = mapper;
         this.repository = repository;
     }
-//obtener todos los registros y los convierte en DTO
+
+    //obtener todos los registros y los convierte en DTO
     public List<DetalleVentaDTO> findAll() {
 
         return repository.findAll()
@@ -33,7 +34,7 @@ public class DetalleVentaService implements IDetalleVentaService {
                 .toList();
     }
 
-//filtrar los detalles de venta por fecha y/o sucursal si los parametros nulos no se aplican los filtros lo contrario se ordena por fecha
+    //filtrar los detalles de venta por fecha y/o sucursal si los parámetros nulos no se aplican los filtros lo contrario se ordena por fecha
     @Override
     public List<DetalleVentaDTO> findByParameter(LocalDate fecha, String sucursal) {
         List<DetalleVentaDTO> list = findAll();
@@ -45,7 +46,7 @@ public class DetalleVentaService implements IDetalleVentaService {
                 .collect(Collectors.toList());
     }
 
-//eliminar detalle vente por su iD si no se encuentra lanza la excepcion
+    //eliminar detalle vente por su iD si no se encuentra lanza la excepción
     @Override
     public void delete(Long id) {
 
@@ -64,6 +65,7 @@ public class DetalleVentaService implements IDetalleVentaService {
     public DetalleVentaDTO convertirADTO(DetalleVenta detalleVenta) {
         return mapper.toADTO(detalleVenta);
     }
+
     //Convierte un DTO DetalleVenta a su correspondiente entidad
     @Override
     public DetalleVenta convertirAOBJ(DetalleVentaDTO detalleVenta) {

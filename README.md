@@ -17,6 +17,7 @@ Incluye entidades, servicios, controladores, excepciones, y pruebas unitarias e 
 - **src/test/java**: Tests unitarios y de integración para sucursal ,producto y detalleVenta.
 - **sqlDePrueba.txt**: Script SQL para crear la base de datos y cargar datos de ejemplo.
 - **postman_collection.json**: Colección Postman para probar los endpoints de la API.
+- **SonarQube.png**: Captura de pantalla del análisis realizado con SonarQube a la aplicación.
 
 ---
 
@@ -40,7 +41,7 @@ Incluye entidades, servicios, controladores, excepciones, y pruebas unitarias e 
 2. Configurar la conexión a la base de datos en `src/main/resources/application.properties`:
 
     ```properties
-    spring.datasource.url=jdbc:mysql://localhost:3306/smartmarket
+    spring.datasource.url=jdbc:mysql://localhost:3306/smart_market
     spring.datasource.username=tu_usuario
     spring.datasource.password=tu_contraseña
     spring.jpa.hibernate.ddl-auto=update
@@ -49,7 +50,7 @@ Incluye entidades, servicios, controladores, excepciones, y pruebas unitarias e 
 3. Ejecutar el script SQL para crear la base y cargar datos de ejemplo:
 
     ```bash
-    mysql -u tu_usuario -p smartmarket < database.sql
+    mysql -u tu_usuario -p smart_market < sqlDePrueba.txt
     ```
 
 4. Ejecutar la aplicación:
