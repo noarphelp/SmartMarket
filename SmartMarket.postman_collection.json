@@ -506,7 +506,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/venta/5",
+					"raw": "http://localhost:8080/api/detalleVenta/5",
 					"protocol": "http",
 					"host": [
 						"localhost"
