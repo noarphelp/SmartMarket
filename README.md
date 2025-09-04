@@ -1,7 +1,5 @@
 # SmartMarket - Proyecto Final Bootcamp 🚀​🚀​🚀​
 
-Este proyecto es el trabajo final realizado por Fatine, Nico y Jesús para el bootcamp.
-
 ---
 
 ## Descripción 📝​
@@ -77,19 +75,8 @@ Para ejecutar los tests:
 
 ---
 
-## Autores 👩‍💻​👨‍💻​🧑‍💻​
-
-- Fatine
-- Nico
-- Jesús
-
----
-
 ## Contacto 📩​
 
 Para dudas o sugerencias, pueden contactarnos a través del repositorio de GitHub.
 
----
-
-¡Gracias por revisar nuestro proyecto final de bootcamp!
 
