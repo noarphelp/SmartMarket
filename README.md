@@ -1,3 +1,5 @@
+<img width="1024" height="1024" alt="smartMarket" src="https://github.com/user-attachments/assets/5f03c852-a7c9-4c5d-83dc-4971dff8fbc1" />
+
 # SmartMarket - Proyecto Final Bootcamp 🚀​🚀​🚀​
 
 ---
